@@ -1,0 +1,32 @@
+{
+  "name": "spritecloud-test-automation",
+  "version": "1.0.0",
+  "description": "spriteCloud take-home: Playwright UI (saucedemo.com) and API (dummyjson.com) tests",
+  "scripts": {
+    "test": "playwright test --project=chromium --project=api",
+    "test:chromiumui": "playwright test --project=chromium",
+    "test:firefoxui": "playwright test --project=firefox",
+    "test:webkitui": "playwright test --project=webkit",
+    "test:api": "playwright test --project=api",
+    "test:all": "playwright test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "10.6.0",
+    "@playwright/test": "1.65.1",
+    "@types/node": "26.6.6",
+    "dotenv": "18.0.10",
+    "eslint": "10.15.0",
+    "eslint-plugin-playwright": "2.12.2",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.73.0",
+    "zod": "4.6.7"
+  },
+  "private": true
+}
