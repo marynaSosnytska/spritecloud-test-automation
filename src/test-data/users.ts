@@ -22,14 +22,18 @@ export const apiUsers: Record<'valid' | 'invalidPassword', UserCredentials> = {
   invalidPassword: { username: env.DUMMYJSON_USERNAME, password: WRONG_PASSWORD },
 }
 
-export const failedLoginCases: { title: string; user: UserCredentials; expectedError: LoginError }[] = [
+export const failedLoginCases: {
+  title: string
+  user: UserCredentials
+  expectedError: LoginError
+}[] = [
   {
-    title: 'wrong password is rejected',
+    title: 'user cannot log in with a wrong password',
     user: users.invalidPassword,
     expectedError: LoginError.InvalidCredentials,
   },
   {
-    title: 'locked-out user is rejected',
+    title: 'locked out user cannot log in',
     user: users.lockedOut,
     expectedError: LoginError.LockedOut,
   },

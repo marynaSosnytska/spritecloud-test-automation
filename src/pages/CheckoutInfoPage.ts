@@ -19,14 +19,14 @@ export class CheckoutInfoPage extends BasePage {
     this.continueButton = page.getByRole('button', { name: 'Continue' })
   }
 
-  @step('Fill in customer information')
+  @step('Fill in customer details')
   async fillCustomer(customer: Customer): Promise<void> {
     await this.firstNameInput.fill(customer.firstName)
     await this.lastNameInput.fill(customer.lastName)
     await this.postalCodeInput.fill(customer.postalCode)
   }
 
-  @step()
+  @step('Continue to the order overview')
   async continue(): Promise<void> {
     await this.continueButton.click()
   }

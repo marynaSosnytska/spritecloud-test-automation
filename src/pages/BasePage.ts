@@ -6,7 +6,7 @@ export abstract class BasePage {
 
   constructor(readonly page: Page) {}
 
-  @step()
+  @step('Open the page')
   async open(): Promise<void> {
     await this.page.goto(this.path)
   }

@@ -54,7 +54,7 @@ export class CheckoutOverviewPage extends BasePage {
     return toCents(await this.totalLabel.innerText())
   }
 
-  @step()
+  @step('Finish the order')
   async finish(): Promise<void> {
     await this.finishButton.click()
   }

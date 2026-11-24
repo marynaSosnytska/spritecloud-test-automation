@@ -4,7 +4,7 @@ import { Tag } from '../../src/test-data/tags'
 import { byNameDesc } from '../../src/utils/sort'
 
 test(
-  'products can be sorted Z-A',
+  'user can sort products by name from Z to A',
   { tag: [Tag.UI, Tag.Smoke] },
   async ({ loggedInInventory: inventory }) => {
     const initialNames = await inventory.getProductNames()
@@ -12,14 +12,17 @@ test(
 
     await inventory.sortBy(SortOption.NameDesc)
 
-    await test.step('products are listed in reverse alphabetical order', async () => {
-      await expect(inventory.productNames, 'names should be sorted Z-A').toHaveText(expectedNames)
-      expect(expectedNames, 'Z-A should be the exact reverse of the default A-Z order').toEqual(
+    await test.step('products are listed from Z to A', async () => {
+      await expect(inventory.productNames, 'product names should go from Z to A').toHaveText(
+        expectedNames,
+      )
+      expect(expectedNames, 'Z to A should be the default A to Z list in reverse').toEqual(
         [...initialNames].reverse(),
       )
-      await expect(inventory.activeSortOption, 'sort dropdown should show Z-A').toHaveText(
-        SortOption.NameDesc,
-      )
+      await expect(
+        inventory.activeSortOption,
+        'sort dropdown should show the selected Z to A option',
+      ).toHaveText(SortOption.NameDesc)
     })
   },
 )

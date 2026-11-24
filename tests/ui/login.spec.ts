@@ -8,9 +8,11 @@ for (const { title, user, expectedError } of failedLoginCases) {
     await loginPage.open()
     await loginPage.login(user)
 
-    await test.step('user sees why login was rejected', async () => {
-      await expect(loginPage.errorMessage, 'login error should be shown').toHaveText(expectedError)
-      await expect(page, 'user should stay on login page').toHaveURL(env.UI_BASE_URL + '/')
+    await test.step('user stays on the login page and sees the error', async () => {
+      await expect(loginPage.errorMessage, 'error should explain why the login failed').toHaveText(
+        expectedError,
+      )
+      await expect(page, 'user should still be on the login page').toHaveURL(env.UI_BASE_URL + '/')
     })
   })
 }

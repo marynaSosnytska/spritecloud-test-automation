@@ -1,5 +1,5 @@
 import type { APIRequestContext, TestInfo } from '@playwright/test'
-import { HttpMethod } from '../test-data/http';
+import { HttpMethod } from '../test-data/http'
 
 export type ApiResponse = { status: number; body: unknown }
 

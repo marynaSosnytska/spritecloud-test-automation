@@ -14,7 +14,7 @@ export class CartPage extends BasePage {
     this.checkoutButton = page.getByRole('button', { name: 'Checkout' })
   }
 
-  @step()
+  @step('Go to checkout')
   async checkout(): Promise<void> {
     await this.checkoutButton.click()
   }

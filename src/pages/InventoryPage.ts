@@ -26,7 +26,7 @@ export class InventoryPage extends BasePage {
     this.sortSelect = page.getByRole('combobox', { name: 'Sort products' })
   }
 
-  @step()
+  @step('Wait for the page to load')
   async waitForLoaded(): Promise<void> {
     await this.title.waitFor()
   }

@@ -10,7 +10,7 @@ export class HeaderComponent {
     this.cartLink = page.getByRole('button', { name: /^Cart/ })
   }
 
-  @step()
+  @step('Open the cart')
   async openCart(): Promise<void> {
     await this.cartLink.click()
   }

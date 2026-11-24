@@ -11,7 +11,7 @@ export class InventoryItemComponent {
     this.priceLabel = root.getByTestId('inventory-item-price')
   }
 
-  @step()
+  @step('Add to cart')
   async addToCart(): Promise<void> {
     await this.addToCartButton.click()
   }
