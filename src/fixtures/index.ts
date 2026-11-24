@@ -4,6 +4,7 @@ import { ApiClient } from '../api/ApiClient'
 import { parseContract } from '../api/contract'
 import { LoginResponseSchema } from '../api/schemas/auth.schema'
 import { AuthApi } from '../api/services/AuthApi'
+import { CartsApi } from '../api/services/CartsApi'
 import { ProductsApi } from '../api/services/ProductsApi'
 import { CartPage } from '../pages/CartPage'
 import { CheckoutCompletePage } from '../pages/CheckoutCompletePage'
@@ -27,6 +28,7 @@ type Fixtures = {
   customer: Customer
   authApi: AuthApi
   productsApi: ProductsApi
+  cartsApi: CartsApi
   authSession: AuthSession
 }
 
@@ -64,6 +66,9 @@ export const test = base.extend<Fixtures>({
   },
   productsApi: async ({ request }, use, testInfo) => {
     await use(new ProductsApi(new ApiClient(request, testInfo)))
+  },
+  cartsApi: async ({ request }, use, testInfo) => {
+    await use(new CartsApi(new ApiClient(request, testInfo)))
   },
   authSession: async ({ authApi }, use) => {
     const response = await authApi.login(apiUsers.valid)

@@ -1,10 +1,10 @@
 import { parseContract } from '../../src/api/contract'
 import { ErrorSchema } from '../../src/api/schemas/error.schema'
-import { ProductSchema } from '../../src/api/schemas/product.schema'
+import { DeletedProductSchema, ProductSchema } from '../../src/api/schemas/product.schema'
 import { expect, test } from '../../src/fixtures'
 import { HttpStatus } from '../../src/test-data/http'
 import { productNotFound } from '../../src/test-data/messages'
-import { ProductId, ProductLimits } from '../../src/test-data/products'
+import { DELETED_ON_TOLERANCE_MS, ProductId, ProductLimits } from '../../src/test-data/products'
 import { Tag } from '../../src/test-data/tags'
 
 test(
@@ -69,6 +69,46 @@ test(
         parseContract(ErrorSchema, response.body).message,
         'error should include the id we asked for',
       ).toBe(productNotFound(ProductId.Missing))
+    })
+  },
+)
+
+test(
+  'deleted product is returned with a deletion mark',
+  { tag: [Tag.API] },
+  async ({ productsApi }) => {
+    const getResponse = await productsApi.getById(ProductId.Existing)
+
+    const product = await test.step('product exists before it is deleted', () => {
+      expect(getResponse.status, 'request for an existing product should succeed').toBe(
+        HttpStatus.OK,
+      )
+      return parseContract(ProductSchema, getResponse.body)
+    })
+
+    const deleteResponse = await productsApi.deleteById(ProductId.Existing)
+
+    await test.step('delete succeeds', () => {
+      expect(deleteResponse.status, 'deleting an existing product should succeed').toBe(
+        HttpStatus.OK,
+      )
+    })
+
+    const deleted = await test.step('deleted product has the expected fields', () =>
+      parseContract(DeletedProductSchema, deleteResponse.body))
+
+    await test.step('deletion time is recent', () => {
+      expect(
+        Math.abs(Date.now() - new Date(deleted.deletedOn).getTime()),
+        'deletion time should be close to now',
+      ).toBeLessThanOrEqual(DELETED_ON_TOLERANCE_MS)
+    })
+
+    await test.step('deleted product is the same product with a deletion mark', () => {
+      expect(
+        deleted,
+        'deleted product should equal the product we fetched, plus the deletion mark',
+      ).toEqual({ ...product, isDeleted: true, deletedOn: deleted.deletedOn })
     })
   },
 )

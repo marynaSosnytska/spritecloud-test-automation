@@ -18,3 +18,5 @@ export const ProductLimits = {
   discountPercentage: { min: 0, max: 100 },
   reviewRating: { min: 1, max: 5 },
 }
+
+export const DELETED_ON_TOLERANCE_MS = 60_000 // 1 minute
