@@ -7,17 +7,22 @@ export enum SauceUsername {
   LockedOut = 'locked_out_user',
 }
 
-export type SauceUser = { username: string; password: string }
+export type UserCredentials = { username: string; password: string }
 
 const WRONG_PASSWORD = faker.internet.password()
 
-export const users: Record<'standard' | 'lockedOut' | 'invalidPassword', SauceUser> = {
+export const users: Record<'standard' | 'lockedOut' | 'invalidPassword', UserCredentials> = {
   standard: { username: SauceUsername.Standard, password: env.SAUCE_PASSWORD },
   lockedOut: { username: SauceUsername.LockedOut, password: env.SAUCE_PASSWORD },
   invalidPassword: { username: SauceUsername.Standard, password: WRONG_PASSWORD },
 }
 
-export const failedLoginCases: { title: string; user: SauceUser; expectedError: LoginError }[] = [
+export const apiUsers: Record<'valid' | 'invalidPassword', UserCredentials> = {
+  valid: { username: env.DUMMYJSON_USERNAME, password: env.DUMMYJSON_PASSWORD },
+  invalidPassword: { username: env.DUMMYJSON_USERNAME, password: WRONG_PASSWORD },
+}
+
+export const failedLoginCases: { title: string; user: UserCredentials; expectedError: LoginError }[] = [
   {
     title: 'wrong password is rejected',
     user: users.invalidPassword,

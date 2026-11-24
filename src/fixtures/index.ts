@@ -1,5 +1,10 @@
 import { faker } from '@faker-js/faker'
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
+import { ApiClient } from '../api/ApiClient'
+import { parseContract } from '../api/contract'
+import { LoginResponseSchema } from '../api/schemas/auth.schema'
+import { AuthApi } from '../api/services/AuthApi'
+import { ProductsApi } from '../api/services/ProductsApi'
 import { CartPage } from '../pages/CartPage'
 import { CheckoutCompletePage } from '../pages/CheckoutCompletePage'
 import { CheckoutInfoPage } from '../pages/CheckoutInfoPage'
@@ -7,7 +12,10 @@ import { CheckoutOverviewPage } from '../pages/CheckoutOverviewPage'
 import { InventoryPage } from '../pages/InventoryPage'
 import { LoginPage } from '../pages/LoginPage'
 import { buildCustomer, type Customer } from '../test-data/customer.factory'
-import { users } from '../test-data/users'
+import { HttpStatus } from '../test-data/http'
+import { apiUsers, users } from '../test-data/users'
+
+type AuthSession = { userId: number; accessToken: string }
 
 type Fixtures = {
   loginPage: LoginPage
@@ -17,6 +25,9 @@ type Fixtures = {
   checkoutOverviewPage: CheckoutOverviewPage
   checkoutCompletePage: CheckoutCompletePage
   customer: Customer
+  authApi: AuthApi
+  productsApi: ProductsApi
+  authSession: AuthSession
 }
 
 export const test = base.extend<Fixtures>({
@@ -48,6 +59,18 @@ export const test = base.extend<Fixtures>({
     testInfo.annotations.push({ type: 'faker-seed', description: String(seed) })
     await use(buildCustomer())
   },
+  authApi: async ({ request }, use, testInfo) => {
+    await use(new AuthApi(new ApiClient(request, testInfo)))
+  },
+  productsApi: async ({ request }, use, testInfo) => {
+    await use(new ProductsApi(new ApiClient(request, testInfo)))
+  },
+  authSession: async ({ authApi }, use) => {
+    const response = await authApi.login(apiUsers.valid)
+    expect(response.status, 'API login for the session should succeed').toBe(HttpStatus.OK)
+    const login = parseContract(LoginResponseSchema, response.body)
+    await use({ userId: login.id, accessToken: login.accessToken })
+  },
 })
 
-export { expect } from '@playwright/test'
+export { expect }

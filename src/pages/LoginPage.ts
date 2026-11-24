@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test'
 import { step } from '../framework/step'
-import type { SauceUser } from '../test-data/users'
+import type { UserCredentials } from '../test-data/users'
 import { BasePage } from './BasePage'
 
 export class LoginPage extends BasePage {
@@ -20,7 +20,7 @@ export class LoginPage extends BasePage {
   }
 
   @step('Log in as ${0.username}')
-  async login(user: SauceUser): Promise<void> {
+  async login(user: UserCredentials): Promise<void> {
     await this.usernameInput.fill(user.username)
     await this.passwordInput.fill(user.password)
     await this.loginButton.click()
