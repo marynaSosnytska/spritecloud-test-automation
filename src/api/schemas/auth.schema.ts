@@ -33,6 +33,3 @@ export const MeResponseSchema = z.object({
   role: z.string(),
   address: AddressSchema,
 })
-
-export type LoginResponse = z.infer<typeof LoginResponseSchema>
-export type MeResponse = z.infer<typeof MeResponseSchema>

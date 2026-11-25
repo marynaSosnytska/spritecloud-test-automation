@@ -50,7 +50,13 @@ export class ApiClient {
       body: redactBody(options.data),
     })
     const response = await this.request.fetch(path, { method, ...options })
-    const body: unknown = await response.json()
+    const text = await response.text()
+    let body: unknown = text
+    try {
+      body = JSON.parse(text)
+    } catch {
+      // not JSON (for example an HTML error page): keep the text so the report shows it
+    }
     await this.attach(`${method} ${path} response`, {
       status: response.status(),
       body: redactBody(body),

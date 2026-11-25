@@ -50,6 +50,3 @@ export const DeletedProductSchema = ProductSchema.extend({
   isDeleted: z.literal(true),
   deletedOn: z.iso.datetime(),
 })
-
-export type Product = z.infer<typeof ProductSchema>
-export type DeletedProduct = z.infer<typeof DeletedProductSchema>

@@ -16,7 +16,7 @@ import { buildCustomer, type Customer } from '../test-data/customer.factory'
 import { HttpStatus } from '../test-data/http'
 import { apiUsers, users } from '../test-data/users'
 
-type AuthSession = { userId: number; accessToken: string }
+type AuthSession = { userId: number }
 
 type Fixtures = {
   loginPage: LoginPage
@@ -74,7 +74,7 @@ export const test = base.extend<Fixtures>({
     const response = await authApi.login(apiUsers.valid)
     expect(response.status, 'API login for the session should succeed').toBe(HttpStatus.OK)
     const login = parseContract(LoginResponseSchema, response.body)
-    await use({ userId: login.id, accessToken: login.accessToken })
+    await use({ userId: login.id })
   },
 })
 

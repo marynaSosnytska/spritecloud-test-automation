@@ -56,4 +56,9 @@ export function assertCartMatchesRequest(
       )
       .toBeLessThanOrEqual(DISCOUNT_ROUNDING_TOLERANCE)
   }
+
+  const discountedSum = cart.products.reduce((sum, line) => sum + line.discountedPrice, 0)
+  expect
+    .soft(cart.discountedTotal, 'cart discountedTotal should equal the sum of discounted prices')
+    .toBeCloseTo(discountedSum, 2)
 }
